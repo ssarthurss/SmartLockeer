@@ -1,0 +1,38 @@
+SMART LOCKER IFSP - FLUTTER WEB + API C# + IPHONE ATALHOS
+
+ARQUITETURA:
+  PC (Navegador Chrome/Edge - Tela da Fechadura) <-> API ASP.NET Core <-> SQL Server
+  iPhone (App Atalhos - Requisição HTTP POST)   ---> API ASP.NET Core
+
+LOGINS:
+  admin      | TroqueEstaSenha123 (ou o valor de AdminSenhaInicial no appsettings / Azure)
+  SP3000001  | demo123 (aluno dono do "armario_demo")
+
+COMO CONFIGURAR O ATALHO NO IPHONE:
+1. Abra o app "Atalhos" no iPhone e crie um novo atalho (ex: "Abrir Armário").
+2. Adicione a ação "Obter Conteúdo do URL" (URL Contents):
+   - URL: https://SUA-API.azurewebsites.net/atalho (ou http://IP_DO_PC:5000/atalho se estiver na mesma rede Wi-Fi)
+   - Método: POST
+   - Cabeçalhos: Content-Type: application/json
+   - Corpo da Requisição: JSON
+     {
+       "prontuario": "SP3000001",
+       "senha": "demo123",
+       "acao": "alternar"
+     }
+3. Quando você tocar no atalho ou pedir para a Siri ("E aí Siri, Abrir Armário"), a API alterna o status no banco e a tela no PC muda na hora entre TRANCADO (Vermelho) e LIBERADO (Verde).
+
+COMO RODAR A TELA DO ARMÁRIO NO PC:
+Opção A (Via GitHub Actions):
+1. Suba o projeto para o repositório no GitHub.
+2. Na aba Actions, execute "Compilar Flutter Web".
+3. Baixe o artefato "smart-locker-web.zip", descompacte e abra com qualquer servidor local (ou suba no GitHub Pages/Vercel/Azure).
+
+Opção B (Pelo terminal se tiver Flutter instalado):
+   cd app
+   flutter run -d chrome --dart-define=API_URL=https://SUA-API.azurewebsites.net
+
+COMO ATIVAR O MODO FECHADURA NA TELA WEB:
+1. Faça login como "admin" na tela web.
+2. Na lista de armários, clique em "Abrir modo fechadura nesta tela" no armário desejado.
+3. A tela vira o mostrador gigante (TRANCADO / LIBERADO).
